@@ -1,5 +1,7 @@
 from datetime import datetime
 
+from kivymd.toast import toast
+
 
 class FireBase:
     def saloon_info(self, opening, closing):
@@ -37,6 +39,7 @@ class FireBase:
                         "time": time
                     }
                 )
+                toast("Hairstyle Added")
 
     def get_hairstyle(self):
         if True:

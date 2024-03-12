@@ -7,7 +7,7 @@ ScreenManager:
         MDBoxLayout:
             orientation:"vertical"
             MDToolbar:
-                title: "Book Saloon"
+                title: "Eva Beauty Saloon"
                 specific_text_color:78/255, 82/255, 84/255, 1
                 md_bg_color:1, 1, 1, 1
                 right_action_items: [["segment", lambda x: app.screen_capture("set")]]
@@ -63,7 +63,7 @@ ScreenManager:
                 title: "Hairstyle"
                 specific_text_color:78/255, 82/255, 84/255, 1
                 md_bg_color:1, 1, 1, 1
-                right_action_items: [["segment", lambda x: app.callback()]]
+                right_action_items: [["segment", lambda x: app.screen_capture("home")]]
             MDTabs:
                 allow_stretch:False
                 background_color:1, 1, 1, 1
@@ -128,7 +128,7 @@ ScreenManager:
                             helper_text:"Time taken to make"
                             hint_text:"Time"
                             #text_color: 1, 1, 1, 1
-                            font_size: dp(25)
+                            font_size: dp(20)
 
                         MDRaisedButton:
                             text: "Add hair style"
@@ -155,6 +155,8 @@ ScreenManager:
                                 size_hint_y: None
                                 height: self.minimum_height
                                 orientation: 'vertical'
+
+
 <Saloon_work@MDBoxLayout>:
     radius:9
     adaptive_height:True
@@ -185,7 +187,7 @@ ScreenManager:
             text_color:26/255, 54/255, 113/255, 1
             pos_hint:{"center_x":.6,"center_y":.7}
         MDIcon:
-            icon:"dog"
+            icon:"face-woman-shimmer"
             pos_hint:{"center_x":.53,"center_y":.5}
         MDLabel:
             text:root.hair_style
@@ -219,6 +221,7 @@ ScreenManager:
             on_release:
                 print(root.phone)
                 app.today_schedule(root.phone)
+
 <Saloon@MDBoxLayout>:
     radius:9
     adaptive_height:True
@@ -249,7 +252,7 @@ ScreenManager:
             text_color:26/255, 54/255, 113/255, 1
             pos_hint:{"center_x":.6,"center_y":.7}
         MDIcon:
-            icon:"dog"
+            icon:"face-woman-shimmer"
             pos_hint:{"center_x":.53,"center_y":.5}
         MDLabel:
             text:root.hair_style
@@ -292,6 +295,7 @@ ScreenManager:
             md_bg_color: 26/255, 54/255, 113/255, .3
             on_release:
                 print("Deny!")
+
 <Emergency>:
     radius:9
     adaptive_height:True
@@ -335,6 +339,7 @@ ScreenManager:
             pos_hint:{"center_x":.9,"center_y":.5}
             on_release:
                 app.delete_hair(root.name)
+
 
 <Front@MDBoxLayout>:
     radius:20
