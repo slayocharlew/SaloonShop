@@ -91,6 +91,7 @@ class FireBase:
                 initialize_app(cred, {'databaseURL': 'https://farmzon-abdcb.firebaseio.com/'})
                 ref = db.reference('Saloon').child("Eva_beauty").child("Bookings").child(phone)
                 bookings = ref.get()
+                print(bookings, "books")
 
                 ref = db.reference('Saloon').child("Eva_beauty").child("Today_work").child(phone)
                 ref.set(bookings)

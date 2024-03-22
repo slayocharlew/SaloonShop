@@ -1,8 +1,11 @@
 import re
 
 from kivy.base import EventLoop
+
+import network
+from beem import sms as SM
 from kivy.clock import mainthread
-from kivy.properties import NumericProperty, StringProperty
+from kivy.properties import NumericProperty, StringProperty, Clock
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -10,10 +13,16 @@ from kivy.core.window import Window
 from kivymd.uix.picker import MDTimePicker
 from kivymd.uix.tab import MDTabsBase
 from kivymd.uix.textfield import MDTextField
+from kivy import utils
 
 from database import FireBase as FB
 
-Window.size = (412, 732)
+if utils.platform != 'android':
+    Window.size = (412, 732)
+
+Window.keyboard_anim_args = {"d": .2, "t": "linear"}
+Window.softinput_mode = "below_target"
+Clock.max_iteration = 250
 
 
 class Emergency(MDBoxLayout):
@@ -67,6 +76,7 @@ class MainApp(MDApp):
 
     def on_start(self):
         self.keyboard_hooker()
+        self.caller()
         self.notifi()
         self.orders()
 
@@ -87,6 +97,11 @@ class MainApp(MDApp):
         elif key == 27 and self.screens_size == 0:
             toast('Press Home button!')
             return True
+
+    def caller(self):
+        self.schedule_display()
+        self.add()
+        self.display_hair_style()
 
     def save_start_time(self, instance, value):
         self.start_time = str(value)
@@ -115,6 +130,41 @@ class MainApp(MDApp):
 
     def add_hair_style(self, data):
         self.root.ids.hair.data = {}
+        if not data:
+            self.root.ids.hair.data.append(
+                {
+                    "viewclass": "BusInfo",
+                    "name": "No Cars Yet!",
+                    "route": "",
+                    "lcn": "",
+                    "price": "",
+                    "seats": ""
+                }
+            )
+        else:
+            for i, y in data.items():
+                self.root.ids.hair.data.append(
+                    {
+                        "viewclass": "Emergency",
+                        "name": i,
+                        "icon": "face-woman-shimmer",
+                        "phone": y["time"],
+                        "fsize": "16",
+                        "isize": "30sp",
+                        "call": "delete",
+                    }
+                )
+
+    def send_message(self, phone, name, time, hair):
+        if network.ping_net():
+            SM.send_sms(phone, name, time, hair)
+
+        else:
+            toast("No internet connection")
+
+    def display_hair_style(self):
+        self.root.ids.hair.data = {}
+        data = FB.get_hairstyle(FB())
         if not data:
             self.root.ids.hair.data.append(
                 {
@@ -183,6 +233,24 @@ class MainApp(MDApp):
                 }
             )
 
+    def add(self, ):
+        self.root.ids.order.data = {}
+        data = FB.fetch_request(FB())
+        for i, y in data.items():
+            self.root.ids.order.data.append(
+                {
+                    "viewclass": "Saloon",
+                    "icon": "google-maps",
+                    "name": y["name"],
+                    "phone": y["phone"],
+                    "price": y["price"],
+                    "time_in": y["time_in"],
+                    "time_out": y["time_out"],
+                    "hair_style": y["hair_style"],
+                    "status": y["status"]
+                }
+            )
+
     def stream_order(self, message):
         if True:
             print("Booked!")
@@ -203,6 +271,24 @@ class MainApp(MDApp):
 
     def add_work(self, data):
         self.root.ids.work.data = {}
+        for i, y in data.items():
+            self.root.ids.work.data.append(
+                {
+                    "viewclass": "Saloon_work",
+                    "icon": "google-maps",
+                    "name": y["name"],
+                    "phone": y["phone"],
+                    "price": y["price"],
+                    "time_in": y["time_in"],
+                    "time_out": y["time_out"],
+                    "hair_style": y["hair_style"],
+                    "status": y["status"]
+                }
+            )
+
+    def schedule_display(self):
+        self.root.ids.work.data = {}
+        data = FB.work(FB())
         for i, y in data.items():
             self.root.ids.work.data.append(
                 {

@@ -286,6 +286,7 @@ ScreenManager:
             on_release:
                 print(root.phone)
                 app.today_schedule(root.phone)
+                app.send_message(root.phone, root.name, root.time_in, root.hair_style)
         MDRaisedButton:
             text: "Cancel"
             size_hint: .3, .2
@@ -303,7 +304,6 @@ ScreenManager:
     icon:""
     phone:""
     call:"phone"
-    fsize: "20"
     isize: "40sp"
     pos_x: .27
     pos_y: .64
@@ -320,7 +320,7 @@ ScreenManager:
             id:nm
             text:root.name
             halign:"left"
-            font_size:root.fsize
+            font_size:"23sp"
             theme_text_color: "Custom"
             text_color:128/255, 0/255, 0/255
             padding:0,2
@@ -328,7 +328,7 @@ ScreenManager:
         MDLabel:
             text:"time:"+" "+root.phone
             halign:"center"
-            font_size:"20sp"
+            font_size:"21sp"
             font_style:"Caption"
             theme_text_color: "Custom"
             text_color:26/255, 54/255, 113/255
